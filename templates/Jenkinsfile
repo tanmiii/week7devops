@@ -1,0 +1,23 @@
+pipeline{
+agents any
+stages{
+stage('Build'){
+echo "Build docker image"
+bat "docker build -t mypythonflaskapp ."
+}
+stage('Run'){
+echo "Run image in docker container"
+bat "docker -rm -f mycontainer||exit 0"
+bat "docker -d -p 5000:5000 --name mycontainer mypythonflaskapp"
+}
+}
+}
+post{
+success{
+echo "Pipeline  completed successfully!"
+}
+failure{ 
+echo "Pipeline failed.Please check the logs"
+}
+}
+}
